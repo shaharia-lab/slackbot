@@ -1,0 +1,33 @@
+display_information:
+  name: Shaharia-TestBot
+  description: Test SlackBot for Shaharia's PoCs
+  background_color: "#005e94"
+features:
+  bot_user:
+    display_name: Shaharia-TestBot
+    always_online: false
+oauth_config:
+  redirect_urls:
+    - https://ngrok.com:8888/slack
+  scopes:
+    bot:
+      - app_mentions:read
+      - channels:read
+      - chat:write
+      - commands
+      - files:read
+      - files:write
+      - groups:history
+      - channels:history
+      - im:history
+      - mpim:history
+settings:
+  event_subscriptions:
+    request_url: https://78c9-2003-eb-6738-9821-fc59-9db9-9ba6-4b02.ngrok-free.app/slack/events
+    bot_events:
+      - app_mention
+      - message.groups
+      - message.im
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false
