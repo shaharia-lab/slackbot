@@ -13,9 +13,15 @@ import (
 	"github.com/slack-go/slack/slackevents"
 )
 
+// SlackAPI defines the interface for Slack client operations
+type SlackAPI interface {
+	PostMessage(channelID string, options ...slack.MsgOption) (string, string, error)
+	AuthTest() (*slack.AuthTestResponse, error)
+}
+
 // Bot represents a Slack bot instance
 type Bot struct {
-	client        *slack.Client
+	client        SlackAPI
 	botUserID     string
 	config        *Config
 	activeThreads map[string]bool
@@ -28,7 +34,11 @@ type Bot struct {
 // NewBot creates a new Slack bot instance
 func NewBot(config *Config, log *slog.Logger) (*Bot, error) {
 	client := slack.New(config.SlackBotUserOAuthToken)
+	return NewBotWithClient(client, config, log)
+}
 
+// NewBotWithClient creates a new bot with a provided SlackAPI implementation
+func NewBotWithClient(client SlackAPI, config *Config, log *slog.Logger) (*Bot, error) {
 	authTest, err := client.AuthTest()
 	if err != nil {
 		return nil, fmt.Errorf("failed to authenticate with Slack: %w", err)
